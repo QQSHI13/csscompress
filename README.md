@@ -6,7 +6,7 @@ port of YUI Compressor's CSS minifier).
 
 ## What's fixed vs upstream
 
-Upstream `csscompressor` is dormant (last release 0.9.5, 2015). `csscompress`
+Upstream `csscompressor` is dormant (last release 0.9.5, November 2017). `csscompress`
 continues it with:
 
 - **Data-URI whitespace fix**: `url("data:...")` values containing SVG or
