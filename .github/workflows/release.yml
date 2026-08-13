@@ -1,8 +1,9 @@
 name: Release
 
 # Trigger: push a tag (v0.1.0, v1.0.0, ...) — CI tests must pass first.
-# Requires a PyPI API token stored as the `PYPI_API_TOKEN` repo secret
-# (https://pypi.org/manage/account/token/).
+# Publishing uses trusted publishing (OIDC) — no API token. Configure it once
+# on PyPI: project csscompress -> Publishing -> Add pending publisher
+#   owner: QQSHI13, repository: csscompress, workflow: release.yml
 
 on:
   push:
@@ -31,6 +32,9 @@ jobs:
   release:
     needs: test
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/csscompress
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -45,10 +49,11 @@ jobs:
           pip install build
           python -m build
 
-      - name: Publish to PyPI
+      - name: Publish to PyPI (trusted publishing)
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          skip-existing: true
+          packages-dir: dist/
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
